@@ -14,6 +14,8 @@ class _SearchInput extends State<SearchInput>{
 
   void _clearSearchText(){
     _searchTextEditingController.text = "";
+
+    widget.onChanged("");
   }
 
   @override
@@ -31,10 +33,10 @@ class _SearchInput extends State<SearchInput>{
             hintText: "Search item",
             contentPadding: EdgeInsets.all(8.0),
             prefixIcon: Icon(Icons.search),
-            suffixIcon: _searchTextEditingController.text.length != 0 ? GestureDetector(
+            suffixIcon: GestureDetector(
               child: Icon(Icons.highlight_off),
               onTap: _clearSearchText,
-            ) : null,
+            ),
             filled: true,
             fillColor: Colors.white70,
             enabledBorder: OutlineInputBorder(

@@ -46,13 +46,29 @@ class _LandingState extends State<Landing>{
     );
   }
 
+  Widget getContent(){
+    return Consumer<TodoProvider>(
+      builder: (context, provider, widget) {
+        var todos = provider.todos.where((element) => element.todo.toLowerCase().indexOf(filter.toLowerCase()) >= 0).toList();
+
+        return Expanded(
+          child: todos.length != 0 ? ListView.builder(
+            padding: EdgeInsets.only(top: 15),
+            itemCount: todos.length,
+            itemBuilder: (ctx, index) => this._getRow(ctx, index, todos),
+          ) : Center(
+            child: Text("No items"),
+          )
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if(!_isInitialized){
       _initialize();
     }
-
-    var todos = Provider.of<TodoProvider>(context).todos.where((element) => element.todo.toLowerCase().indexOf(filter.toLowerCase()) >= 0).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -61,15 +77,7 @@ class _LandingState extends State<Landing>{
             child: Column(
               children: <Widget>[
                 SearchInput(onChanged: this._onSearchChanged),
-                Expanded(
-                  child: todos.length != 0 ? ListView.builder(
-                    padding: EdgeInsets.only(top: 15),
-                    itemCount: todos.length,
-                    itemBuilder: (ctx, index) => this._getRow(ctx, index, todos),
-                  ) : Center(
-                    child: Text("No items"),
-                  )
-                ),
+                getContent(),
               ],
             )
           )
